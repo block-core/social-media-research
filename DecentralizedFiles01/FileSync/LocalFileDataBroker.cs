@@ -12,7 +12,7 @@ namespace FileDataBroker {
 	/// <summary>
 	/// The local file IO broker
 	/// </summary>
-	public class LocalFileDaaBroker : IFileDataBroker
+	public class LocalFileDataBroker : IFileDataBroker
 	{
 
 		#region Private Static Data Members
@@ -36,10 +36,10 @@ namespace FileDataBroker {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the LocalFileDaaBroker.
+        /// Creates a new instance of the LocalFileDataBroker.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public LocalFileDaaBroker(ILogger<LocalFileDaaBroker> logger)
+        public LocalFileDataBroker(ILogger<LocalFileDataBroker> logger)
 		{
 			//ToDo: Inject RootPath
 			//ToDo: Setup Logging
