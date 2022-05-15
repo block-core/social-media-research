@@ -36,12 +36,6 @@ namespace FileIo{
 		[JsonProperty("lastModified")]
 		public DateTime LastModified { get; set; }
 
-		/// <summary>
-		/// The file version.
-		/// </summary>
-		[JsonProperty("version")]
-		public string Version { get; set; }
-
 		#endregion
 
 	}

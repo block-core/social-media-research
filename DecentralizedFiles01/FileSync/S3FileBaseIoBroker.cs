@@ -99,9 +99,7 @@ namespace FileIo {
 					Size = response.ContentLength,
 					LastModified = response.LastModified
 				};
-				string version = response.Metadata?["x-amz-meta-version"];
-				if (!string.IsNullOrEmpty(version) && Version.TryParse(version, out Version _))
-					item.Version = version;
+
 				return item;
 			}
 		}

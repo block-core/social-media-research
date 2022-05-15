@@ -102,9 +102,7 @@ namespace FileIo {
 				Size = fi.Length,
 				LastModified = fi.LastWriteTime
 			};
-			FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(fullPath);
-			if (!string.IsNullOrEmpty(fvi.FileVersion) && Version.TryParse(fvi.FileVersion, out Version version))
-				item.Version = fvi.FileVersion;
+
 			return Task.FromResult(item);
 		}
 
