@@ -32,13 +32,13 @@ namespace FileBaseSync
         Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default);
 
         /// <summary>
-        /// Gets the FileIoItem Information from the specified fileName and path.
+        /// Gets the FileData Information from the specified fileName and path.
         /// </summary>
         /// <param name="fileName">The file fileName.</param>
         /// <param name="path">The file path.</param>
         /// <param name="cancelToken">The cancel token.</param>
         /// <returns>The file fileName item.</returns>
-        Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default);
+        Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default);
 
         /// <summary>
         /// Gets the directory listing from the specified fileName and path.

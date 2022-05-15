@@ -83,7 +83,7 @@ namespace FileBaseSync
             return Task.FromResult((Stream)new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.Asynchronous));
         }
 
-        public Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default)
+        public Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException(nameof(fileName));
@@ -94,7 +94,7 @@ namespace FileBaseSync
             if (!File.Exists(fullPath))
                 throw new FileNotFoundException($"File \"{fullPath}\" not found.", fullPath);
             cancelToken.ThrowIfCancellationRequested();
-            //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileIoItemAsync), fileName, path);
+            //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileDataAsync), fileName, path);
             FileInfo fi = new FileInfo(fullPath);
             FileData item = new FileData()
             {

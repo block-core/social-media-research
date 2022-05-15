@@ -88,7 +88,7 @@ namespace FileBaseSync
             }
         }
 
-        public async Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default)
+        public async Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException(nameof(fileName));

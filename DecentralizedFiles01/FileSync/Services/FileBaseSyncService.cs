@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FileBaseSync
 {
-    internal class FileBaseSyncServices
+    internal class FileBaseSyncService
     {
+
     }
 }
