@@ -6,7 +6,7 @@ namespace FileDataBroker{
 	/// A file fileName item.
 	/// </summary>
 	[JsonObject()]
-	public class FileItemInfo {
+	public class FileData {
 
 		#region Public Properties
 

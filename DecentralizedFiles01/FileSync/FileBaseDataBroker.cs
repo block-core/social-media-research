@@ -80,7 +80,7 @@ namespace FileDataBroker {
 			}
 		}
 
-		public async Task<FileItemInfo> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default) {
+		public async Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default) {
 			if (string.IsNullOrEmpty(fileName))
 				throw new ArgumentNullException(nameof(fileName));
 			if (string.IsNullOrEmpty(path))
@@ -93,7 +93,7 @@ namespace FileDataBroker {
 			using (response = await s3client.GetObjectAsync(request, cancelToken).ConfigureAwait(false)) {
 				if ((response?.ContentLength ?? 0) == 0)
 					return null;
-				FileItemInfo item = new FileItemInfo() {
+				FileData item = new FileData() {
 					Path = response.Key,
 					FileName = Path.GetFileName(response.Key),
 					Size = response.ContentLength,
@@ -104,7 +104,7 @@ namespace FileDataBroker {
 			}
 		}
 
-		public async Task<IList<FileItemInfo>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default) {
+		public async Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default) {
 			if (string.IsNullOrEmpty(fileName))
 				throw new ArgumentNullException(nameof(fileName));
 			cancelToken.ThrowIfCancellationRequested();
@@ -113,7 +113,7 @@ namespace FileDataBroker {
 			ListObjectsV2Response response = null;
 			using (IAmazonS3 s3client = GetS3Client())
 				response = await s3client.ListObjectsV2Async(request, cancelToken).ConfigureAwait(false);
-			return response?.S3Objects?.Select(s3Obj => new FileItemInfo() {
+			return response?.S3Objects?.Select(s3Obj => new FileData() {
 				Path = s3Obj.Key,
 				FileName = Path.GetFileName(s3Obj.Key),
 				Size = s3Obj.Size,

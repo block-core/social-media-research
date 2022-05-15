@@ -36,7 +36,7 @@ namespace FileDataBroker {
 		/// <param name="path">The file path.</param>
 		/// <param name="cancelToken">The cancel token.</param>
 		/// <returns>The file fileName item.</returns>
-		Task<FileItemInfo> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default);
+		Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default);
 
 		/// <summary>
 		/// Gets the directory listing from the specified fileName and path.
@@ -45,7 +45,7 @@ namespace FileDataBroker {
 		/// <param name="path">The directory path. Include trailing / for directories.</param>
 		/// <param name="cancelToken">The cancel token.</param>
 		/// <returns>A list of file fileName items.</returns>
-		Task<IList<FileItemInfo>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default);
+		Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default);
 
 		/// <summary>
 		/// Uploads a file to the specified fileName and path from the stream.

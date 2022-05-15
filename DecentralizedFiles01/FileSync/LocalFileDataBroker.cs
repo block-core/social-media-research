@@ -82,7 +82,7 @@ namespace FileDataBroker {
 			return Task.FromResult((Stream)new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.Asynchronous));
 		}
 
-		public Task<FileItemInfo> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default)
+		public Task<FileData> GetFileIoItemAsync(string fileName, string path, CancellationToken cancelToken = default)
 		{
 			if (string.IsNullOrEmpty(fileName))
 				throw new ArgumentNullException(nameof(fileName));
@@ -95,7 +95,7 @@ namespace FileDataBroker {
 			cancelToken.ThrowIfCancellationRequested();
 			//Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileIoItemAsync), fileName, path);
 			FileInfo fi = new FileInfo(fullPath);
-			FileItemInfo item = new FileItemInfo()
+			FileData item = new FileData()
 			{
 				Path = fullPath.Replace(fileNamePath + '\\', ""),
 				FileName = fi.Name,
@@ -106,7 +106,7 @@ namespace FileDataBroker {
 			return Task.FromResult(item);
 		}
 
-		public Task<IList<FileItemInfo>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default)
+		public Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default)
 		{
 			if (string.IsNullOrEmpty(fileName))
 				throw new ArgumentNullException(nameof(fileName));
@@ -117,11 +117,11 @@ namespace FileDataBroker {
 				throw new DirectoryNotFoundException($"Directory \"{directoryPath}\" not found.");
 			cancelToken.ThrowIfCancellationRequested();
 			//Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetDirectoryListingAsync), fileName, path);
-			return Task.FromResult<IList<FileItemInfo>>(Directory.GetFiles(directoryPath, $"{filePrefix}*", SearchOption.AllDirectories)
+			return Task.FromResult<IList<FileData>>(Directory.GetFiles(directoryPath, $"{filePrefix}*", SearchOption.AllDirectories)
 				.Select(f =>
 				{
 					FileInfo fi = new FileInfo(f);
-					return new FileItemInfo() { Path = f.Replace(fileNamePath + '\\', ""), FileName = fi.Name, Size = fi.Length, LastModified = fi.LastWriteTime };
+					return new FileData() { Path = f.Replace(fileNamePath + '\\', ""), FileName = fi.Name, Size = fi.Length, LastModified = fi.LastWriteTime };
 				})
 				.ToList());
 		}
