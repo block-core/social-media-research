@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileBaseDirectoryWatcher-01", "FileBaseDirectoryWatcher-01\FileBaseDirectoryWatcher-01.csproj", "{BF1CAEA2-3167-40A1-A188-05C62C743B9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileSync", "FileSync\FileSync.csproj", "{38508978-B6D4-4465-AACB-56578F682C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileBaseSync", "FileSync\FileBaseSync.csproj", "{38508978-B6D4-4465-AACB-56578F682C8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
