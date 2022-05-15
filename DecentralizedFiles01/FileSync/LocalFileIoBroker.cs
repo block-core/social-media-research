@@ -97,9 +97,8 @@ namespace FileIo {
 			FileInfo fi = new FileInfo(fullPath);
 			FileItemInfo item = new FileItemInfo()
 			{
-				FileName = fileName,
 				Path = fullPath.Replace(fileNamePath + '\\', ""),
-				Filename = fi.Name,
+				FileName = fi.Name,
 				Size = fi.Length,
 				LastModified = fi.LastWriteTime
 			};
@@ -124,7 +123,7 @@ namespace FileIo {
 				.Select(f =>
 				{
 					FileInfo fi = new FileInfo(f);
-					return new FileItemInfo() { FileName = fileName, Path = f.Replace(fileNamePath + '\\', ""), Filename = fi.Name, Size = fi.Length, LastModified = fi.LastWriteTime };
+					return new FileItemInfo() { Path = f.Replace(fileNamePath + '\\', ""), FileName = fi.Name, Size = fi.Length, LastModified = fi.LastWriteTime };
 				})
 				.ToList());
 		}

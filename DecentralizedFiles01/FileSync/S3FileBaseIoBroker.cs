@@ -94,9 +94,8 @@ namespace FileIo {
 				if ((response?.ContentLength ?? 0) == 0)
 					return null;
 				FileItemInfo item = new FileItemInfo() {
-					FileName = fileName,
 					Path = response.Key,
-					Filename = Path.GetFileName(response.Key),
+					FileName = Path.GetFileName(response.Key),
 					Size = response.ContentLength,
 					LastModified = response.LastModified
 				};
@@ -117,9 +116,8 @@ namespace FileIo {
 			using (IAmazonS3 s3client = GetS3Client())
 				response = await s3client.ListObjectsV2Async(request, cancelToken).ConfigureAwait(false);
 			return response?.S3Objects?.Select(s3Obj => new FileItemInfo() {
-				FileName = fileName,
 				Path = s3Obj.Key,
-				Filename = Path.GetFileName(s3Obj.Key),
+				FileName = Path.GetFileName(s3Obj.Key),
 				Size = s3Obj.Size,
 				LastModified = s3Obj.LastModified
 			}).ToList();

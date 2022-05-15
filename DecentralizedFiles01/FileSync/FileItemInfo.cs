@@ -25,13 +25,6 @@ namespace FileIo{
 		public string Path { get; set; }
 
 		/// <summary>
-		/// The file name.
-		/// </summary>
-		[JsonProperty("filename")]
-		[JsonRequired()]
-		public string Filename { get; set; }
-
-		/// <summary>
 		/// The file size.
 		/// </summary>
 		[JsonProperty("size")]
