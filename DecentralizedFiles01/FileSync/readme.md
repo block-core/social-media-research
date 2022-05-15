@@ -1,4 +1,4 @@
-﻿This library provides file data broker functionality to between local storage and 
+﻿This library provides file data broker functionality between local storage and 
 Filebase's S3 interface.
 
 The main artefact will be stuctured json file containing a social media post as well as pointers
