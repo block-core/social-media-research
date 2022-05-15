@@ -3,11 +3,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileIo {
+namespace FileDataBroker {
 	/// <summary>
 	/// Defines file management broker functionality.
 	/// </summary>
-	public interface IFileIoBroker  {
+	public interface IFileDataBroker  {
 
 		#region Public Methods
 

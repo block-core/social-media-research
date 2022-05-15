@@ -13,11 +13,11 @@ using Amazon.S3.Model;
 using Microsoft.Extensions.Logging;
 
 
-namespace FileIo {
+namespace FileDataBroker {
 	/// <summary>
 	/// The S3 file IO Broker.
 	/// </summary>
-	public class S3FileBaseIoBroker :  IFileIoBroker {
+	public class FileBaseDataBroker :  IFileDataBroker {
 
 		#region Private Data Members
 		private const string accessKey = "Filebase Access Key";
@@ -30,10 +30,10 @@ namespace FileIo {
 		#region Constructors
 
 		/// <summary>
-		/// Creates a new instance of the S3FileBaseIoBroker.
+		/// Creates a new instance of the FileBaseDataBroker.
 		/// </summary>
 		/// <param name="logger">The logger.</param>
-		public S3FileBaseIoBroker(ILogger<S3FileBaseIoBroker> logger)   {
+		public FileBaseDataBroker(ILogger<FileBaseDataBroker> logger)   {
 
 			//ToDo: Inject Access Keys
 			//ToDo: Inject BucketName

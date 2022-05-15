@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace FileIo{
+namespace FileDataBroker{
 	/// <summary>
 	/// A file fileName item.
 	/// </summary>

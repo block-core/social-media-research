@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 
-namespace FileIo {
+namespace FileDataBroker {
 	/// <summary>
 	/// The local file IO broker
 	/// </summary>
-	public class LocalFileIoBroker : IFileIoBroker
+	public class LocalFileDaaBroker : IFileDataBroker
 	{
 
 		#region Private Static Data Members
@@ -36,10 +36,10 @@ namespace FileIo {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the LocalFileIoBroker.
+        /// Creates a new instance of the LocalFileDaaBroker.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public LocalFileIoBroker(ILogger<LocalFileIoBroker> logger)
+        public LocalFileDaaBroker(ILogger<LocalFileDaaBroker> logger)
 		{
 			//ToDo: Inject RootPath
 			//ToDo: Setup Logging
