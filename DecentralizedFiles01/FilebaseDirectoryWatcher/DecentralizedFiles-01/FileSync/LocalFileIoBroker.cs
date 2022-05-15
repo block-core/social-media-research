@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FileIo {
 	/// <summary>
-	/// The local file IO service
+	/// The local file IO broker
 	/// </summary>
-	public class LocalFileIoService : IFileIoService
+	public class LocalFileIoBroker : IFileIoBroker
 	{
 
 		#region Private Static Data Members
@@ -36,10 +36,10 @@ namespace FileIo {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the LocalFileIoService.
+        /// Creates a new instance of the LocalFileIoBroker.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public LocalFileIoService(ILogger<LocalFileIoService> logger)
+        public LocalFileIoBroker(ILogger<LocalFileIoBroker> logger)
 		{
 			//ToDo: Inject RootPath
 			//ToDo: Setup Logging
@@ -48,7 +48,7 @@ namespace FileIo {
 
 		#endregion
 
-		#region IFileIoService Members
+		#region IFileIoBroker Members
 
 		public async Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default)
 		{

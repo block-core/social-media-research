@@ -15,9 +15,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FileIo {
 	/// <summary>
-	/// The S3 file IO Service.
+	/// The S3 file IO Broker.
 	/// </summary>
-	public class S3FileBaseIoService :  IFileIoService {
+	public class S3FileBaseIoBroker :  IFileIoBroker {
 
 		#region Private Data Members
 		private const string accessKey = "Filebase Access Key";
@@ -30,11 +30,10 @@ namespace FileIo {
 		#region Constructors
 
 		/// <summary>
-		/// Creates a new instance of the S3FileBaseIoService.
+		/// Creates a new instance of the S3FileBaseIoBroker.
 		/// </summary>
 		/// <param name="logger">The logger.</param>
-		/// <param name="settingService">The settings service.</param>
-		public S3FileBaseIoService(ILogger<S3FileBaseIoService> logger)   {
+		public S3FileBaseIoBroker(ILogger<S3FileBaseIoBroker> logger)   {
 
 			//ToDo: Inject Access Keys
 			//ToDo: Inject BucketName
@@ -43,7 +42,7 @@ namespace FileIo {
 
 		#endregion
 
-		#region IFileIoServices Members
+		#region IFileIoBroker Members
 
 		public async Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default) {
 			if (string.IsNullOrEmpty(fileName))

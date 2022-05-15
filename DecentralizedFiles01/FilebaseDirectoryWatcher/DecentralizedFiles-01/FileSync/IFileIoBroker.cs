@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace FileIo {
 	/// <summary>
-	/// Defines file management service functionality.
+	/// Defines file management broker functionality.
 	/// </summary>
-	public interface IFileIoService  {
+	public interface IFileIoBroker  {
 
 		#region Public Methods
 
