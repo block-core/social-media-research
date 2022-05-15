@@ -1,6 +1,8 @@
-﻿This library models File IO for Local Files and 
-the Filebase S3 File API. The two implementions mirror each
-other as they both implement the same File IO interface.
+﻿This library provides file data broker functionality to between local storage and 
+Filebase's S3 interface.
 
-This should allow a user to sync their local files with the
-Filebase "cloud" seamlessly.
+The main artefact will be stuctured json file containing a social media post as well as pointers
+to other media files. 
+
+Both posts and media files will be exposed to the outside work via a "Pre-Signed URL" with
+an explicit duration.
