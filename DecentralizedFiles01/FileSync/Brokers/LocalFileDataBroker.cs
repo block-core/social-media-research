@@ -13,7 +13,7 @@ namespace FileBaseSync
     /// <summary>
     /// The local file IO broker
     /// </summary>
-    public class LocalFileDataBroker : IFileDataBroker
+    public class LocalFileDataBroker : ILocalFileBroker
     {
 
         #region Private Static Data Members

@@ -18,7 +18,7 @@ namespace FileBaseSync
     /// <summary>
     /// The S3 file IO Broker.
     /// </summary>
-    public class FileBaseDataBroker : IFileDataBroker
+    public class FileBaseDataBroker : IFileBaseBroker
     {
 
         #region Private Data Members
