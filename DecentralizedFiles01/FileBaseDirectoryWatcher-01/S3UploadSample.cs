@@ -20,7 +20,7 @@ namespace Amazon.DocSamples.S3
 
         private static IAmazonS3 client;
 
-        public static void Main()
+        public static void MainTest()
         {
             AmazonS3Config s3Config = new AmazonS3Config
             {
