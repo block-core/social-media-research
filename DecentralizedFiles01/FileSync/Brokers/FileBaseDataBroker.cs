@@ -20,7 +20,6 @@ namespace FileBaseSync
     /// </summary>
     public class FileBaseDataBroker : IFileBaseBroker
     {
-
         #region Private Data Members
         private const string accessKey = "Filebase Access Key";
         private const string secretKey = "Filebase Secret Key";
@@ -47,34 +46,29 @@ namespace FileBaseSync
 
         #region IFileIoBroker Members
 
-        public async Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default)
+        public async Task<byte[]> GetFileAsync(string fileName, string path, int bufferSize, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(nameof(path));
             cancelToken.ThrowIfCancellationRequested();
+
             byte[] file;
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileAsync), fileName, path);
             using (Stream stream = await GetFileStreamAsync(fileName, path, cancelToken).ConfigureAwait(false))
             using (MemoryStream ms = new MemoryStream())
             {
-                await stream.CopyToAsync(ms, 81920, cancelToken).ConfigureAwait(false);
+                await stream.CopyToAsync(ms, bufferSize, cancelToken).ConfigureAwait(false);
                 file = ms.ToArray();
             }
             return file;
         }
 
         public async Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(nameof(path));
-            cancelToken.ThrowIfCancellationRequested();
+        {            
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileStreamAsync), fileName, path);
             GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(fileName), Key = path };
             GetObjectResponse response = null;
+
+            cancelToken.ThrowIfCancellationRequested();
+
             using (IAmazonS3 s3client = GetS3Client())
             {
                 response = await s3client.GetObjectAsync(request, cancelToken).ConfigureAwait(false);
@@ -90,14 +84,12 @@ namespace FileBaseSync
 
         public async Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(nameof(path));
-            cancelToken.ThrowIfCancellationRequested();
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileStreamAsync), fileName, path);
             GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(fileName), Key = path };
             GetObjectResponse response = null;
+
+            cancelToken.ThrowIfCancellationRequested();
+
             using (IAmazonS3 s3client = GetS3Client())
             using (response = await s3client.GetObjectAsync(request, cancelToken).ConfigureAwait(false))
             {
@@ -115,16 +107,19 @@ namespace FileBaseSync
             }
         }
 
-        public async Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default)
+        //ToDo: Test if path should be used for bucketName, and if prefix should be empty
+        public async Task<IList<FileData>> GetDirectoryListingAsync(/*string fileName, */string path, string filter, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            cancelToken.ThrowIfCancellationRequested();
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetDirectoryListingAsync), fileName, path);
-            ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(fileName), Prefix = path };
+            //ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(fileName), Prefix = path };
+            ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(path), Prefix = filter };
             ListObjectsV2Response response = null;
+
+            cancelToken.ThrowIfCancellationRequested();
+
             using (IAmazonS3 s3client = GetS3Client())
                 response = await s3client.ListObjectsV2Async(request, cancelToken).ConfigureAwait(false);
+
             return response?.S3Objects?.Select(s3Obj => new FileData()
             {
                 Path = s3Obj.Key,
@@ -134,35 +129,22 @@ namespace FileBaseSync
             }).ToList();
         }
 
-        public async Task UploadFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(nameof(path));
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-            cancelToken.ThrowIfCancellationRequested();
+        public async Task UploadFileAsync(string fileName, string path, Stream stream, int bufferSize, CancellationToken cancelToken = default)
+        {            
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(UploadFileAsync), fileName, path);
             PutObjectRequest request = new PutObjectRequest() { BucketName = GetBucketName(fileName), Key = path, InputStream = stream };
             PutObjectResponse response = null;
+
+            cancelToken.ThrowIfCancellationRequested();
+
             using (IAmazonS3 s3client = GetS3Client())
                 response = await s3client.PutObjectAsync(request, cancelToken).ConfigureAwait(false);
             if (response.HttpStatusCode != HttpStatusCode.OK)
                 throw new HttpRequestException($"S3 file upload failed: {response.HttpStatusCode}.");
         }
 
-        public async Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, CancellationToken cancelToken = default)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(sourcePath))
-                throw new ArgumentNullException(nameof(sourcePath));
-            if (string.IsNullOrEmpty(destinationPath))
-                throw new ArgumentNullException(nameof(destinationPath));
-            if (sourcePath.Equals(destinationPath))
-                return;
-            cancelToken.ThrowIfCancellationRequested();
+        public async Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, int bufferSize, CancellationToken cancelToken = default)
+        {            
             //Logger.LogTrace("{method}: {fileName}, {sourcePath}, {destinationPath}", nameof(CopyFileAsync), fileName, sourcePath, destinationPath);
             CopyObjectRequest request = new CopyObjectRequest()
             {
@@ -171,7 +153,11 @@ namespace FileBaseSync
                 DestinationBucket = GetBucketName(fileName),
                 DestinationKey = destinationPath
             };
+
             CopyObjectResponse response = null;
+
+            cancelToken.ThrowIfCancellationRequested();
+
             using (IAmazonS3 s3client = GetS3Client())
                 response = await s3client.CopyObjectAsync(request, cancelToken).ConfigureAwait(false);
             if (response.HttpStatusCode != HttpStatusCode.OK)
@@ -179,6 +165,7 @@ namespace FileBaseSync
         }
 
         #endregion
+
 
         #region Private Methods
 

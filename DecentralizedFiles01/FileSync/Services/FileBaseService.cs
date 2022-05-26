@@ -6,10 +6,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
+
 namespace FileBaseSync.Services
 {
     internal class FileBaseService : IFileBaseService
     {
+
+        private static readonly int bufferSize = 8192;
 
         private IFileBaseBroker fileBaseBroker;
         public FileBaseService(IFileBaseBroker _fileBaseBroker)
@@ -19,32 +26,81 @@ namespace FileBaseSync.Services
 
         public async Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
-            return await fileBaseBroker.GetFileAsync(fileName, path, cancelToken);
+
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            return await fileBaseBroker.GetFileAsync(fileName, path, bufferSize, cancelToken);
         }
 
-        public Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default)
-        {
-            return fileBaseBroker.GetFileStreamAsync(fileName, path, cancelToken);
-        }
+        //public Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default)
+        //{
+        //    if (string.IsNullOrEmpty(fileName))
+        //        throw new ArgumentNullException(nameof(fileName));
+        //    if (string.IsNullOrEmpty(path))
+        //        throw new ArgumentNullException(nameof(path));
+        //    cancelToken.ThrowIfCancellationRequested();
+
+        //    return fileBaseBroker.GetFileStreamAsync(fileName, path, cancelToken);
+        //}
 
         public Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            cancelToken.ThrowIfCancellationRequested();
+
             return fileBaseBroker.GetFileDataAsync(fileName, path, cancelToken);
         }
 
-        public Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default)
+        public Task<IList<FileData>> GetDirectoryListingAsync(string path, string filter, CancellationToken cancelToken = default)
         {
-            return fileBaseBroker.GetDirectoryListingAsync(fileName, path, cancelToken);
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            //return fileBaseBroker.GetDirectoryListingAsync(fileName, path, cancelToken);
+            return fileBaseBroker.GetDirectoryListingAsync(path,  filter, cancelToken);
         }
 
         public async Task UploadFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default)
         {
-            await fileBaseBroker.UploadFileAsync(fileName, path, stream, cancelToken);
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            await fileBaseBroker.UploadFileAsync(fileName, path, stream, bufferSize, cancelToken);
         }
 
         public async Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, CancellationToken cancelToken = default)
         {
-            await fileBaseBroker.CopyFileAsync(fileName, sourcePath, destinationPath, cancelToken);
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (string.IsNullOrEmpty(sourcePath))
+                throw new ArgumentNullException(nameof(sourcePath));
+            if (string.IsNullOrEmpty(destinationPath))
+                throw new ArgumentNullException(nameof(destinationPath));
+            if (sourcePath.Equals(destinationPath))
+                return;
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            await fileBaseBroker.CopyFileAsync(fileName, sourcePath, destinationPath, bufferSize, cancelToken);
         }
+
+
     }
 }
