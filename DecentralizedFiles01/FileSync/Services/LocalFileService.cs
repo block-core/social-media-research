@@ -140,19 +140,22 @@ namespace FileBaseSync.Services
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException(nameof(fileName));
+
             if (RootPath == null)
-                throw new InvalidOperationException("The local file fileName rootpath is not defined.");
+                throw new InvalidOperationException("The local file root path is not defined.");
+
             if (string.IsNullOrEmpty(RootPath)
                 || !Directory.Exists(RootPath)
             )
             {
-                throw new InvalidOperationException("The local file fileName root path does not exist.");
+                throw new InvalidOperationException("The local file  root path does not exist.");
             }
 
-            string fileNamePath = Path.Combine(RootPath, fileName);
-            if (!Directory.Exists(fileNamePath))
-                throw new InvalidOperationException($"The \"{fileName}\" fileName does not exist.");
-            return string.IsNullOrEmpty(path) ? fileNamePath : Path.Combine(fileNamePath, path.Replace('/', '\\'))?.TrimEnd('\\');
+            string fileNamePath = Path.Combine(RootPath, fileName).Replace('\\', '/').TrimEnd('/');
+            if (!File.Exists(fileNamePath))
+                throw new InvalidOperationException($"The file path: \"{fileNamePath}\", does not exist.");
+
+            return fileNamePath;
         }
 
         #endregion
