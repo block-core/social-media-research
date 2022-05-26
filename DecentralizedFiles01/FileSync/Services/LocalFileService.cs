@@ -151,9 +151,9 @@ namespace FileBaseSync.Services
                 throw new InvalidOperationException("The local file  root path does not exist.");
             }
 
-            path = Path.Combine(RootPath, path);
+            path = Path.Combine(RootPath, path).TrimEnd('\\');
 
-            string fileNamePath = Path.Combine(path, fileName).Replace('\\', '/').TrimEnd('/');
+            string fileNamePath = Path.Combine(path, fileName).Replace('\\', '/');
             if (!File.Exists(fileNamePath))
                 throw new InvalidOperationException($"The file path: \"{fileNamePath}\", does not exist.");
 
