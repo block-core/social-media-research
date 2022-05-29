@@ -26,10 +26,6 @@ namespace FileBaseDirectoryWatcher_01
 
             Console.WriteLine(@$"FileBaseDirectory: {config["FileBaseDirectory"]}");
 
-            //workerInstance.Execute();
-            //var fw = new FileWatcher(config);
-            //fw.Execute();
-
             host.Run();
             Console.WriteLine("Press enter to exit.");
             Console.ReadLine();
@@ -47,25 +43,6 @@ namespace FileBaseDirectoryWatcher_01
                     services.AddSingleton<FileWatcher>();
                 });
         }
-
-        //static private void ConfigureServices(IServiceCollection serviceCollection)
-        //{
-        //    //ILoggerFactory loggerFactory = new Logging.LoggerFactory();
-        //    //serviceCollection.AddInstance<ILoggerFactory>(loggerFactory);
-        //    //var svcCol = new ServiceCollection();
-        //   // IServiceProvider provider = svcs.BuildServiceProvider();
-        //    //var runtime = provider.GetRequiredService<RunTime>();
-
-
-        //    var config = new ConfigurationBuilder()
-        //                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        //                    .AddJsonFile("appsettings.json")
-        //                    .AddUserSecrets<Program>()
-        //                    .Build();
-
-        //    Console.WriteLine(@$"Credentials: accessKey: {config["FileBaseDirectory"]}");
-
-        //}
 
     }
 }
