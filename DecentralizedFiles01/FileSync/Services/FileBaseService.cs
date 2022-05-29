@@ -71,19 +71,6 @@ namespace FileBaseSync.Services
             return fileBaseBroker.GetDirectoryListingAsync(path,  filter, cancelToken);
         }
 
-        public async Task UploadFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(nameof(path));
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            cancelToken.ThrowIfCancellationRequested();
-
-            await fileBaseBroker.UploadFileAsync(fileName, path, stream, bufferSize, cancelToken);
-        }
 
         public async Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, CancellationToken cancelToken = default)
         {
@@ -111,6 +98,29 @@ namespace FileBaseSync.Services
             cancelToken.ThrowIfCancellationRequested();
 
             await fileBaseBroker.DeleteFileAsync(fileName, path, cancelToken);
+        }
+
+        public async Task UpsertFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            bool fileExists = await fileBaseBroker.FileExistsAsync(fileName, path, cancelToken);
+            if (!fileExists)
+            {
+                await fileBaseBroker.PutFileAsync(fileName, path, stream,  cancelToken);
+            }
+            else
+            {
+                await fileBaseBroker.UploadFileAsync(fileName, path, stream, bufferSize, cancelToken);
+            }
+
         }
     }
 }

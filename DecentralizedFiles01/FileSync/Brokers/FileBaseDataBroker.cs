@@ -173,8 +173,63 @@ namespace FileBaseSync
                     BucketName = path,
                     Key = fileName
                 };
+
+                cancelToken.ThrowIfCancellationRequested();
+
                 await s3client.DeleteObjectAsync(request, cancelToken);
                 
+            }
+        }
+
+        public async Task<bool> FileExistsAsync(string fileName, string path, CancellationToken cancelToken = default)
+        {
+            //ToDo: Is this method reliable? Research options
+            using (IAmazonS3 s3client = GetS3Client())
+            {
+                try
+                {
+                    var request = new GetObjectMetadataRequest()
+                    {
+                        BucketName = path,
+                        Key = fileName
+                    };
+
+                    cancelToken.ThrowIfCancellationRequested();
+
+                    var response = await s3client.GetObjectMetadataAsync(request);
+
+                    return true;
+                }
+
+                catch (Amazon.S3.AmazonS3Exception ex)
+                {
+                    if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        return false;
+
+                    //status wasn't not found, so throw the exception
+                    //throw;
+                }
+
+                return false;
+
+            }
+        }
+
+        public async Task PutFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default)
+        {
+            using (IAmazonS3 s3client = GetS3Client())
+            {
+                var request = new PutObjectRequest()
+                {
+                    BucketName = path,
+                    Key = fileName,
+                    InputStream = stream,
+                };
+
+                cancelToken.ThrowIfCancellationRequested();
+
+                await s3client.PutObjectAsync(request, cancelToken);
+
             }
         }
 

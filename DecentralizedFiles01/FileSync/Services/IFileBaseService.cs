@@ -11,8 +11,8 @@ namespace FileBaseSync.Services
         Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default);
         Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default);
         Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default);
-        //Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default);
-        Task UploadFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default);
+        Task UpsertFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default);
         Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default);
+        
     }
 }

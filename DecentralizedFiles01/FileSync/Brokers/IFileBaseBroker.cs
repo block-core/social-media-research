@@ -12,7 +12,7 @@ namespace FileBaseSync
     {
         //ToDo: If we create a local file version of this method, then move to IFileDataBroker
         Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default);
-
-
+        Task<bool> FileExistsAsync(string fileName, string path, CancellationToken cancelToken = default);
+        Task PutFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default);
     }
 }
