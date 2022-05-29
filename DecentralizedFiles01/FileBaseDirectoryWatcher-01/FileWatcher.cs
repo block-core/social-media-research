@@ -48,30 +48,6 @@ namespace FileBaseDirectoryWatcher_01
             watcher.EnableRaisingEvents = true;
         }
 
-        public void Execute()
-        {
-
-            using var watcher = new FileSystemWatcher(@"d:/social-media");
-
-            watcher.NotifyFilter = NotifyFilters.Attributes
-                                         | NotifyFilters.CreationTime
-                                         | NotifyFilters.DirectoryName
-                                         | NotifyFilters.FileName
-                                         | NotifyFilters.LastAccess
-                                         | NotifyFilters.LastWrite
-                                         | NotifyFilters.Security
-                                         | NotifyFilters.Size;
-
-            watcher.Changed += OnChanged;
-            watcher.Created += OnCreated;
-            watcher.Deleted += OnDeleted;
-            watcher.Renamed += OnRenamed;
-            watcher.Error += OnError;
-
-            watcher.Filter = "*.txt";
-            watcher.IncludeSubdirectories = true;
-            watcher.EnableRaisingEvents = true;
-        }
 
         #region FileWatcher Events
         private static void OnChanged(object sender, FileSystemEventArgs e)
