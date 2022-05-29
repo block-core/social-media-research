@@ -10,6 +10,8 @@ namespace FileBaseSync
     /// </summary>
     public interface IFileBaseBroker:IFileDataBroker
     {
+        //ToDo: If we create a local file version of this method, then move to IFileDataBroker
+        Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default);
 
 
     }

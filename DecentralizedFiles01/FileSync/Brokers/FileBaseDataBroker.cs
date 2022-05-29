@@ -164,6 +164,21 @@ namespace FileBaseSync
                 throw new HttpRequestException($"S3 file copy failed: {response.HttpStatusCode}.");
         }
 
+        public async Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default)
+        {
+            using (IAmazonS3 s3client = GetS3Client())
+            {
+                var request = new DeleteObjectRequest()
+                {
+                    BucketName = path,
+                    Key = fileName
+                };
+                await s3client.DeleteObjectAsync(request, cancelToken);
+                
+            }
+        }
+
+
         #endregion
 
 

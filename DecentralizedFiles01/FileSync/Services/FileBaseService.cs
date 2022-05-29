@@ -101,6 +101,16 @@ namespace FileBaseSync.Services
             await fileBaseBroker.CopyFileAsync(fileName, sourcePath, destinationPath, bufferSize, cancelToken);
         }
 
+        public async Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
 
+            cancelToken.ThrowIfCancellationRequested();
+
+            await fileBaseBroker.DeleteFileAsync(fileName, path, cancelToken);
+        }
     }
 }
