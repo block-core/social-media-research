@@ -6,3 +6,13 @@ to other media files.
 
 Both posts and media files will be exposed to the outside world via a "Pre-Signed URL" with
 an explicit duration.
+
+Note: The FileBaseDirectoryWatcher Program is a simple proof-of-concept app; and, 
+For now Each developer must supply their own secrets.json file with this structure:
+
+{
+  "filebase_credentials": {
+    "accesskey": "sdfaff",
+    "secretkey": "asdfafd"
+  }
+}

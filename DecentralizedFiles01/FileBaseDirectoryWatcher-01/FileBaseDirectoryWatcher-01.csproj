@@ -7,11 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.9.9" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0-preview.4.22229.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.4.22229.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-preview.4.22229.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0-preview.4.22229.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FileSync\FileBaseSync.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
