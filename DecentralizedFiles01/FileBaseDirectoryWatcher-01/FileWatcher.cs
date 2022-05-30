@@ -53,7 +53,7 @@ namespace FileBaseDirectoryWatcher_01
         private static void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType != WatcherChangeTypes.Changed ||
-                (lastChanged.AddMilliseconds(250) > DateTimeOffset.UtcNow && lastChangedFile == e.FullPath)
+                (lastChanged.AddMilliseconds(1000) > DateTimeOffset.UtcNow && lastChangedFile == e.FullPath)
                )
             {
                 return;

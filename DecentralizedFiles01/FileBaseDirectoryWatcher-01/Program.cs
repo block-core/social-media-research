@@ -7,6 +7,7 @@ namespace FileBaseDirectoryWatcher_01
 {
     internal class Program
     {
+        static private FileWatcher fileWatcher;
 
         static void Main(string[] args)
         {
@@ -16,7 +17,7 @@ namespace FileBaseDirectoryWatcher_01
             
             using IServiceScope serviceScope = host.Services.CreateScope();
             IServiceProvider provider = serviceScope.ServiceProvider;
-            var workerInstance = provider.GetRequiredService<FileWatcher>();
+            fileWatcher = provider.GetRequiredService<FileWatcher>();
 
             IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
