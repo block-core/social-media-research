@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FileBaseSync.Services
 {
-    internal interface IFileBaseService
+    public interface IFileBaseService
     {
         Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, CancellationToken cancelToken = default);
         Task<IList<FileData>> GetDirectoryListingAsync(string fileName, string path, CancellationToken cancelToken = default);

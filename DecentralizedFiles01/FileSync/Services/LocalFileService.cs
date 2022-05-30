@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileBaseSync.Services
 {
-    internal class LocalFileService : ILocalFileService
+    public class LocalFileService : ILocalFileService
     {
         #region Private Static Data Members
 

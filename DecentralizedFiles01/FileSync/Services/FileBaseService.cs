@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 using System.Collections.Generic;
 using System.IO;
@@ -14,14 +16,15 @@ using Amazon.S3.Model;
 
 namespace FileBaseSync.Services
 {
-    internal class FileBaseService : IFileBaseService
+    public class FileBaseService : IFileBaseService
     {
-
+        private IConfiguration config;
         private static readonly int bufferSize = 8192;
 
         private IFileBaseBroker fileBaseBroker;
-        public FileBaseService(IFileBaseBroker _fileBaseBroker)
+        public FileBaseService(IConfiguration _config, IFileBaseBroker _fileBaseBroker)
         {
+            config = _config;
             fileBaseBroker = _fileBaseBroker;
         }
 

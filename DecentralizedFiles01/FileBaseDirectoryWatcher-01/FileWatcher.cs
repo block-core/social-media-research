@@ -10,6 +10,8 @@ using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 
+using FileBaseSync;
+using FileBaseSync.Models;
 
 namespace FileBaseDirectoryWatcher_01
 {
@@ -21,10 +23,17 @@ namespace FileBaseDirectoryWatcher_01
         static FileSystemWatcher watcher;
 
         private readonly IConfiguration configuration;
+        public FileBaseCredentialsOptions? CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
 
-        public FileWatcher(IConfiguration configuration)
+        public FileWatcher(IConfiguration _configuration)
         {
-            this.configuration = configuration;
+            configuration = _configuration;
+
+            configuration.GetSection(CredentialOptions.AccessKey).Bind(CredentialOptions);
+
+            var accessKey = CredentialOptions.AccessKey;//configuration.GetSection(CredentialOptions.AccessKey).Get<FileBaseCredentialsOptions>();
+            var secretKey = CredentialOptions.SecretKey;//configuration.GetSection(CredentialOptions.SecretKey).Get<FileBaseCredentialsOptions>();
+
 
             watcher = new FileSystemWatcher(@"d:/social-media");
 
@@ -60,18 +69,23 @@ namespace FileBaseDirectoryWatcher_01
             }
             lastChanged = DateTimeOffset.UtcNow;
             lastChangedFile = e.FullPath;
-            Console.WriteLine($"Changed: {e.FullPath}");
+            Console.WriteLine($"Changed: {e.FullPath.Replace('\\', '/')}");
 
         }
 
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
-            string value = $"Created: {e.FullPath}";
+            string value = $"Created: {e.FullPath.Replace('\\', '/')}";
             Console.WriteLine(value);
+
+            string fileName = e.Name;
+            string path = Path.GetDirectoryName(e.FullPath.Replace('\\', '/'));
+
+            Console.WriteLine($@"Directory: {path.Replace('\\', '/')}");
         }
 
         private static void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"Deleted: {e.FullPath}");
+            Console.WriteLine($"Deleted: {e.FullPath.Replace('\\', '/')}");
 
         private static void OnRenamed(object sender, RenamedEventArgs e)
         {

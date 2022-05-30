@@ -7,7 +7,7 @@ using FileBaseSync;
 
 namespace FileBaseSync.Services
 {
-    internal class FileBaseSyncService
+    public class FileBaseSyncService
     {
         private ILocalFileService localFileService;
         private IFileBaseService fileBaseService;

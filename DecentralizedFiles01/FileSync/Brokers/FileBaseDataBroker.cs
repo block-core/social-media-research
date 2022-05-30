@@ -10,8 +10,9 @@ using Amazon;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
+using FileBaseSync.Models;
 
 namespace FileBaseSync
 {
@@ -21,8 +22,10 @@ namespace FileBaseSync
     public class FileBaseDataBroker : IFileBaseBroker
     {
         #region Private Data Members
-        private const string accessKey = "Filebase Access Key";
-        private const string secretKey = "Filebase Secret Key";
+        private IConfiguration config;
+        public FileBaseCredentialsOptions? CredentialOptions { get; private set; }
+        private  string accessKey = "Filebase Access Key";
+        private  string secretKey = "Filebase Secret Key";
         private string bucketName;
         private string serviceUrl = "https://s3.filebase.com";
 
@@ -34,10 +37,12 @@ namespace FileBaseSync
         /// Creates a new instance of the FileBaseDataBroker.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public FileBaseDataBroker(ILogger<FileBaseDataBroker> logger)
+        public FileBaseDataBroker(IConfiguration _config, ILogger<FileBaseDataBroker> logger)
         {
+            config = _config;
+            accessKey = config.GetSection(CredentialOptions.AccessKey).Value;
+            secretKey = config.GetSection(CredentialOptions.SecretKey).Value;
 
-            //ToDo: Inject Access Keys
             //ToDo: Inject BucketName
 
         }
