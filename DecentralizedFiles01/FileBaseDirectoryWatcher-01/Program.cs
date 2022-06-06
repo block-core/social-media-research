@@ -48,6 +48,7 @@ namespace FileBaseDirectoryWatcher_01
                    //.Build();
 
                    app.AddConfiguration(config);
+                   
 
                })
                .ConfigureServices(services =>
@@ -60,8 +61,8 @@ namespace FileBaseDirectoryWatcher_01
                    services.AddSingleton<LocalFileDataBroker>();
                    services.AddSingleton<FileBaseSyncService>();
 
-                   var cfg = config.GetSection(FileBaseCredentialsOptions.Credentials);
-                   services.Configure<FileBaseCredentialsOptions>(cfg);
+                   services.Configure<FileBaseCredentialsOptions>(config.GetSection("FilebaseCredentials"));
+
                    services.AddOptions<FileBaseCredentialsOptions>()
                     .Bind(config.GetSection(FileBaseCredentialsOptions.Credentials));
 

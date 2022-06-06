@@ -31,11 +31,13 @@ namespace FileBaseDirectoryWatcher_01
 
             configuration.GetSection(CredentialOptions.AccessKey).Bind(CredentialOptions);
 
-            var accessKey = CredentialOptions.AccessKey;//configuration.GetSection(CredentialOptions.AccessKey).Get<FileBaseCredentialsOptions>();
-            var secretKey = CredentialOptions.SecretKey;//configuration.GetSection(CredentialOptions.SecretKey).Get<FileBaseCredentialsOptions>();
+            CredentialOptions = _configuration.GetSection("FilebaseCredentials").Get<FileBaseCredentialsOptions>();
+
+            var accessKey = CredentialOptions.AccessKey;
+            var secretKey = CredentialOptions.SecretKey;
 
 
-            watcher = new FileSystemWatcher(@"d:/social-media");
+            watcher = new FileSystemWatcher(@"E:\Archive\social-media");
 
             watcher.NotifyFilter = NotifyFilters.Attributes
                                          | NotifyFilters.CreationTime

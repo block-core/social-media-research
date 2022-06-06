@@ -1,4 +1,4 @@
-using System;
+//using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,12 +6,25 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
+
+using Microsoft.Extensions.Logging;
+
+
+
+using System;
+using System.IO;
+
+using Microsoft.Extensions.Configuration;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using System.Threading;
 using Amazon;
-using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+
+using FileBaseSync;
 using FileBaseSync.Models;
 
 namespace FileBaseSync
@@ -22,8 +35,8 @@ namespace FileBaseSync
     public class FileBaseDataBroker : IFileBaseBroker
     {
         #region Private Data Members
-        private IConfiguration config;
-        public FileBaseCredentialsOptions? CredentialOptions { get; private set; }
+        private readonly Microsoft.Extensions.Configuration.IConfiguration configuration;
+        public FileBaseCredentialsOptions? CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
         private  string accessKey = "Filebase Access Key";
         private  string secretKey = "Filebase Secret Key";
         private string bucketName;
@@ -37,11 +50,16 @@ namespace FileBaseSync
         /// Creates a new instance of the FileBaseDataBroker.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public FileBaseDataBroker(IConfiguration _config, ILogger<FileBaseDataBroker> logger)
+        public FileBaseDataBroker(Microsoft.Extensions.Configuration.IConfiguration _configuration, ILogger<FileBaseDataBroker> logger)
         {
-            config = _config;
-            accessKey = config.GetSection(CredentialOptions.AccessKey).Value;
-            secretKey = config.GetSection(CredentialOptions.SecretKey).Value;
+            configuration = _configuration;
+
+            configuration.GetSection(CredentialOptions.AccessKey).Bind(CredentialOptions);
+
+            CredentialOptions = _configuration.GetSection("FilebaseCredentials").Get<FileBaseCredentialsOptions>();
+
+            var accessKey = CredentialOptions.AccessKey;
+            var secretKey = CredentialOptions.SecretKey;
 
             //ToDo: Inject BucketName
 
