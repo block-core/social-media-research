@@ -17,6 +17,8 @@ using Amazon.S3.Model;
 
 using FileBaseSync;
 using FileBaseSync.Models;
+using Amazon.Runtime;
+using Amazon.S3.Util;
 
 namespace FileBaseSync
 {
@@ -31,7 +33,7 @@ namespace FileBaseSync
         private  string accessKey = "Filebase Access Key";
         private  string secretKey = "Filebase Secret Key";
         private string bucketName;
-        private string serviceUrl = "https://s3.filebase.com";
+        //private string serviceUrl = "https://s3.filebase.com";
 
         #endregion
 
@@ -53,6 +55,8 @@ namespace FileBaseSync
             secretKey = CredentialOptions.SecretKey;
 
             bucketName = configuration["S3BucketName"];
+
+            CreateBucketAsync().Wait();
 
         }
 
@@ -78,7 +82,7 @@ namespace FileBaseSync
         public async Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default)
         {            
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileStreamAsync), fileName, path);
-            GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(fileName), Key = path };
+            GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(), Key = path };
             GetObjectResponse response = null;
 
             cancelToken.ThrowIfCancellationRequested();
@@ -99,7 +103,7 @@ namespace FileBaseSync
         public async Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default)
         {
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileStreamAsync), fileName, path);
-            GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(fileName), Key = path };
+            GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(), Key = path };
             GetObjectResponse response = null;
 
             cancelToken.ThrowIfCancellationRequested();
@@ -126,7 +130,7 @@ namespace FileBaseSync
         {
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetDirectoryListingAsync), fileName, path);
             //ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(fileName), Prefix = path };
-            ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(path), Prefix = filter };
+            ListObjectsV2Request request = new ListObjectsV2Request() { BucketName = GetBucketName(), Prefix = filter };
             ListObjectsV2Response response = null;
 
             cancelToken.ThrowIfCancellationRequested();
@@ -146,7 +150,7 @@ namespace FileBaseSync
         public async Task UploadFileAsync(string fileName, string path, Stream stream, int bufferSize, CancellationToken cancelToken = default)
         {            
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(UploadFileAsync), fileName, path);
-            PutObjectRequest request = new PutObjectRequest() { BucketName = GetBucketName(fileName), Key = path, InputStream = stream };
+            PutObjectRequest request = new PutObjectRequest() { BucketName = GetBucketName(), Key = path, InputStream = stream };
             PutObjectResponse response = null;
 
             cancelToken.ThrowIfCancellationRequested();
@@ -162,9 +166,9 @@ namespace FileBaseSync
             //Logger.LogTrace("{method}: {fileName}, {sourcePath}, {destinationPath}", nameof(CopyFileAsync), fileName, sourcePath, destinationPath);
             CopyObjectRequest request = new CopyObjectRequest()
             {
-                SourceBucket = GetBucketName(fileName),
+                SourceBucket = GetBucketName(),
                 SourceKey = sourcePath,
-                DestinationBucket = GetBucketName(fileName),
+                DestinationBucket = GetBucketName(),
                 DestinationKey = destinationPath
             };
 
@@ -247,24 +251,68 @@ namespace FileBaseSync
             }
         }
 
+        public async Task CreateBucketAsync()
+        {
+            var s3Client = GetS3Client();
+            try
+            {
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
+                {
+                    var putBucketRequest = new PutBucketRequest
+                    {
+                        BucketName = bucketName,
+                    };
+
+                    PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
+                }
+                string bucketLocation = await FindBucketLocationAsync(s3Client);
+                return;
+            }
+            catch (AmazonS3Exception e)
+            {
+                throw new AmazonS3Exception("Error encountered on server when creating S3 bucket.", e);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Unknown encountered on server when writing an S3 bucket.", e);
+            }
+
+        }
+
+
+
 
         #endregion
 
-
         #region Private Methods
-
+        private async Task<string> FindBucketLocationAsync(IAmazonS3 client)
+        {
+            string bucketLocation;
+            var request = new GetBucketLocationRequest()
+            {
+                BucketName = GetBucketName()
+            };
+            GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
+            bucketLocation = response.Location.ToString();
+            return bucketLocation;
+        }
         /// <summary>
         /// Gets the S3 client.
         /// </summary>
         /// <returns>The S3 client.</returns>
         private IAmazonS3 GetS3Client()
         {
-            AmazonS3Config s3Config = new AmazonS3Config
+            AmazonS3Config s3Config = new AmazonS3Config()
             {
-                ServiceURL = serviceUrl,
+                ServiceURL = string.Format("<https://s3.filebase.com:443>"),
+                UseHttp = true,
+                ForcePathStyle = true,
+                ProxyHost = "s3.filebase.com",
+                ProxyPort = 443
             };
 
-            return new AmazonS3Client(accessKey, secretKey, s3Config);
+            AWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
+            return new AmazonS3Client(creds, s3Config);
         }
 
         /// <summary>
@@ -272,7 +320,7 @@ namespace FileBaseSync
         /// </summary>
         /// <param name="fileName">The file fileName.</param>
         /// <returns>The bucket name.</returns>
-        private string GetBucketName(string fileName)
+        private string GetBucketName()
         {
             return bucketName;
         }

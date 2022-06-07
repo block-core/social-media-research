@@ -8,11 +8,25 @@ Both posts and media files will be exposed to the outside world via a "Pre-Signe
 an explicit duration.
 
 Note: The FileBaseDirectoryWatcher Program is a simple proof-of-concept app; and, 
-For now Each developer must supply their own secrets.json file with this structure:
+For now Each developer must supply their own secrets.json file with this structure. 
+Remember the secrets.json need to mirror the appsettings.json.
 
+appsettings.json-
 {
-  "filebase_credentials": {
-    "accesskey": "sdfaff",
-    "secretkey": "asdfafd"
+  "FileBaseDirectory": "E:\\Archive\\social-media",
+  "Mode": "Dev",
+  "S3BucketName": "someBucket",
+  "FilebaseCredentials": {
+    "AccessKey": "SomeKey",
+    "SecretKey": "SomeSecret"
+  }
+}
+
+secrets.json-
+{
+  "S3BucketName": "SuperSecretBucketName",
+  "FilebaseCredentials": {
+    "AccessKey": "SuperSecretKey",
+    "SecretKey": "SuperSecretSecret"
   }
 }
