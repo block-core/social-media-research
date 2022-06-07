@@ -29,13 +29,12 @@ namespace FileBaseSync.Services
         #endregion
 
         private ILocalFileBroker localFileBroker;
-        public LocalFileService(ILocalFileBroker _localFileBroker)
+        public LocalFileService(Microsoft.Extensions.Configuration.IConfiguration _configuration, ILocalFileBroker _localFileBroker)
         {
             localFileBroker = _localFileBroker;
 
-            //ToDo: Inject RootPath
             //ToDo: Setup Logging
-            RootPath = @"d:\temp\";
+            _rootpath = _configuration["FileBaseDirectory"];
         }
 
         public async Task<byte[]> GetFileAsync(string fileName, string path, CancellationToken cancelToken = default)
