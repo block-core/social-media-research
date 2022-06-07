@@ -1,4 +1,4 @@
-//using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,19 +7,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 using Microsoft.Extensions.Logging;
-
-
-
-using System;
-using System.IO;
-
 using Microsoft.Extensions.Configuration;
-
 using Microsoft.Extensions.DependencyInjection;
 
-using System.Threading;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
