@@ -14,10 +14,13 @@ namespace Amazon.DocSamples.S3
 
         private static IAmazonS3 client;
 
-        public static void Main()
+        private string accessKey = "Filebase Access Key";
+        private string secretKey = "Filebase Secret Key";
+
+        public UploadObjectTest()
         {
-            string accessKey = "filebase-access-key";
-            string secretKey = "filebase-secret-key";
+            accessKey = "filebase-access-key";
+            secretKey = "filebase-secret-key";
             AmazonS3Config config = new AmazonS3Config()
             {
                 ServiceURL = string.Format("<https://s3.filebase.com:443>"),

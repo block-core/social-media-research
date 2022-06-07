@@ -27,7 +27,7 @@ namespace FileBaseSync
     {
         #region Private Data Members
         private readonly Microsoft.Extensions.Configuration.IConfiguration configuration;
-        public FileBaseCredentialsOptions? CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
+        public FileBaseCredentialsOptions CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
         private  string accessKey = "Filebase Access Key";
         private  string secretKey = "Filebase Secret Key";
         private string bucketName;
@@ -49,8 +49,8 @@ namespace FileBaseSync
 
             CredentialOptions = _configuration.GetSection("FilebaseCredentials").Get<FileBaseCredentialsOptions>();
 
-            var accessKey = CredentialOptions.AccessKey;
-            var secretKey = CredentialOptions.SecretKey;
+            accessKey = CredentialOptions.AccessKey;
+            secretKey = CredentialOptions.SecretKey;
 
             //ToDo: Inject BucketName
 

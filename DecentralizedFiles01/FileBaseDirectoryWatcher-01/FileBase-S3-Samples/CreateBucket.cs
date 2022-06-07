@@ -12,7 +12,7 @@ namespace Amazon.DocSamples.S3
     {
         private const string bucketName = "new-filebase-bucket";
         private static IAmazonS3 s3Client;
-        public static void Main()
+        public  CreateBucketTest()
         {
             string accessKey = "filebase-access-key";
             string secretKey = "filebase-secret-key";
@@ -35,7 +35,7 @@ namespace Amazon.DocSamples.S3
             {
                 try
                 {
-                    if (!(await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName)))
+                    if (!(await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName)))
                     {
                         var putBucketRequest = new PutBucketRequest
                         {
