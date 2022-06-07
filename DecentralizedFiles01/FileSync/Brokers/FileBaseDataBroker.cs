@@ -251,7 +251,7 @@ namespace FileBaseSync
             }
         }
 
-        public async Task CreateBucketAsync()
+        private async Task CreateBucketAsync()
         {
             var s3Client = GetS3Client();
             try
@@ -274,7 +274,7 @@ namespace FileBaseSync
             }
             catch (Exception e)
             {
-                throw new Exception("Unknown encountered on server when writing an S3 bucket.", e);
+                throw new Exception("Unknown error encountered on server when creating an S3 bucket.", e);
             }
 
         }
