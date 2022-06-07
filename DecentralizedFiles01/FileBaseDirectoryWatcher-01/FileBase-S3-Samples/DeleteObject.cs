@@ -10,8 +10,8 @@ namespace Amazon.DocSamples.S3
     {
         private const string bucketName = "filebase-bucket-name";
         private const string keyName = "object-name";
-        private string accessKey = "Filebase Access Key";
-        private string secretKey = "Filebase Secret Key";
+        private string accessKey;
+        private string secretKey;
         private static IAmazonS3 client;
 
         public DeleteObjectNonVersionedBucketTest()

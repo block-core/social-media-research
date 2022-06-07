@@ -52,7 +52,7 @@ namespace FileBaseSync
             accessKey = CredentialOptions.AccessKey;
             secretKey = CredentialOptions.SecretKey;
 
-            //ToDo: Inject BucketName
+            bucketName = configuration["S3BucketName"];
 
         }
 

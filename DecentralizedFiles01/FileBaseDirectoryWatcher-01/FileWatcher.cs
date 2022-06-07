@@ -20,10 +20,11 @@ namespace FileBaseDirectoryWatcher_01
         private const string filePath = @"*** file path ***";
         static DateTimeOffset lastChanged = DateTimeOffset.UtcNow;
         static string lastChangedFile = null;
+        private string bucketName;
         static FileSystemWatcher watcher;
 
         private readonly IConfiguration configuration;
-        public FileBaseCredentialsOptions? CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
+        public FileBaseCredentialsOptions CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
 
         public FileWatcher(IConfiguration _configuration)
         {
@@ -35,9 +36,10 @@ namespace FileBaseDirectoryWatcher_01
 
             var accessKey = CredentialOptions.AccessKey;
             var secretKey = CredentialOptions.SecretKey;
+            bucketName = configuration["S3BucketName"];
 
-
-            watcher = new FileSystemWatcher(@"E:\Archive\social-media");
+            //watcher = new FileSystemWatcher(@"E:\Archive\social-media");
+            watcher = new FileSystemWatcher(bucketName);
 
             watcher.NotifyFilter = NotifyFilters.Attributes
                                          | NotifyFilters.CreationTime
@@ -104,7 +106,7 @@ namespace FileBaseDirectoryWatcher_01
         private static void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());
 
-        private static void PrintException(Exception? ex)
+        private static void PrintException(Exception ex)
         {
             if (ex != null)
             {
