@@ -40,7 +40,8 @@ namespace FileBaseDirectoryWatcher_01
             hostBuilder.ConfigureAppConfiguration(app =>
                {
                    app.AddJsonFile("appsettings.json");
-                    //ToDo: Note - Each developer needs to change this
+                    //ToDo: Note - Each developer needs to change this for their dev machine
+                    //and for production the secret should leverage azure key vault or similar
                    app.AddUserSecrets("75b24535-8edf-454c-9b21-ae1e0ea0f89c");
                    app.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                    .AddJsonFile("appsettings.json")

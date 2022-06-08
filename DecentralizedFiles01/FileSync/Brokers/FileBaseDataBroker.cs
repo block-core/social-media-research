@@ -30,8 +30,8 @@ namespace FileBaseSync
         #region Private Data Members
         private readonly Microsoft.Extensions.Configuration.IConfiguration configuration;
         public FileBaseCredentialsOptions CredentialOptions { get; private set; } = new FileBaseCredentialsOptions();
-        private  string accessKey = "Filebase Access Key";
-        private  string secretKey = "Filebase Secret Key";
+        private string accessKey = "Filebase Access Key";
+        private string secretKey = "Filebase Secret Key";
         private string bucketName;
         //private string serviceUrl = "https://s3.filebase.com";
 
@@ -64,6 +64,34 @@ namespace FileBaseSync
 
         #region IFileIoBroker Members
 
+        public async Task<string> GeneratePreSignedURL(string key, double duration, CancellationToken cancelToken = default)
+        {
+            cancelToken.ThrowIfCancellationRequested();
+
+            string urlString = "";
+            try
+            {
+                GetPreSignedUrlRequest request1 = new GetPreSignedUrlRequest
+                {
+                    BucketName = bucketName,
+                    Key = key,
+                    Expires = DateTime.UtcNow.AddHours(duration)
+                };
+                //urlString = GetS3Client().GetPreSignedURL(request1);
+                Action action = () => { urlString = GetS3Client().GetPreSignedURL(request1); };
+                await Task.Run(action);
+            }
+            catch (AmazonS3Exception e)
+            {
+                Console.WriteLine("Error encountered on server. Message:'{0}' when writing an object", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+            }
+            return urlString;
+        }
+
         public async Task<byte[]> GetFileAsync(string fileName, string path, int bufferSize, CancellationToken cancelToken = default)
         {
             cancelToken.ThrowIfCancellationRequested();
@@ -80,7 +108,7 @@ namespace FileBaseSync
         }
 
         public async Task<Stream> GetFileStreamAsync(string fileName, string path, CancellationToken cancelToken = default)
-        {            
+        {
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(GetFileStreamAsync), fileName, path);
             GetObjectRequest request = new GetObjectRequest() { BucketName = GetBucketName(), Key = path };
             GetObjectResponse response = null;
@@ -148,7 +176,7 @@ namespace FileBaseSync
         }
 
         public async Task UploadFileAsync(string fileName, string path, Stream stream, int bufferSize, CancellationToken cancelToken = default)
-        {            
+        {
             //Logger.LogTrace("{method}: {fileName}, {path}", nameof(UploadFileAsync), fileName, path);
             PutObjectRequest request = new PutObjectRequest() { BucketName = GetBucketName(), Key = path, InputStream = stream };
             PutObjectResponse response = null;
@@ -162,7 +190,7 @@ namespace FileBaseSync
         }
 
         public async Task CopyFileAsync(string fileName, string sourcePath, string destinationPath, int bufferSize, CancellationToken cancelToken = default)
-        {            
+        {
             //Logger.LogTrace("{method}: {fileName}, {sourcePath}, {destinationPath}", nameof(CopyFileAsync), fileName, sourcePath, destinationPath);
             CopyObjectRequest request = new CopyObjectRequest()
             {
@@ -195,7 +223,7 @@ namespace FileBaseSync
                 cancelToken.ThrowIfCancellationRequested();
 
                 await s3client.DeleteObjectAsync(request, cancelToken);
-                
+
             }
         }
 
@@ -324,6 +352,8 @@ namespace FileBaseSync
         {
             return bucketName;
         }
+
+
 
         #endregion
 

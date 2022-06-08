@@ -39,7 +39,7 @@ namespace FileBaseDirectoryWatcher_01
             bucketName = configuration["S3BucketName"];
 
             //watcher = new FileSystemWatcher(@"E:\Archive\social-media");
-            watcher = new FileSystemWatcher(bucketName);
+            watcher = new FileSystemWatcher(configuration["FileBaseDirectory"]);
 
             watcher.NotifyFilter = NotifyFilters.Attributes
                                          | NotifyFilters.CreationTime

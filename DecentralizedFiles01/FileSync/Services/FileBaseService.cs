@@ -126,5 +126,18 @@ namespace FileBaseSync.Services
             }
 
         }
+
+        public async Task<string> GeneratePreSignedURL(string key, double duration, CancellationToken cancelToken = default)
+        {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            if (duration < 1)
+                throw new ArgumentNullException(nameof(duration));
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            return await fileBaseBroker.GeneratePreSignedURL(key, duration, cancelToken);
+        }
     }
 }

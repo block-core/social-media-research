@@ -13,6 +13,6 @@ namespace FileBaseSync.Services
         Task<FileData> GetFileDataAsync(string fileName, string path, CancellationToken cancelToken = default);
         Task UpsertFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default);
         Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default);
-        
+        Task<string> GeneratePreSignedURL(string key, double duration, CancellationToken cancelToken = default);
     }
 }

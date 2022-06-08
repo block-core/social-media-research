@@ -14,5 +14,6 @@ namespace FileBaseSync
         Task DeleteFileAsync(string fileName, string path, CancellationToken cancelToken = default);
         Task<bool> FileExistsAsync(string fileName, string path, CancellationToken cancelToken = default);
         Task PutFileAsync(string fileName, string path, Stream stream, CancellationToken cancelToken = default);
+        Task<string> GeneratePreSignedURL(string key, double duration, CancellationToken cancelToken = default);
     }
 }
